@@ -34,7 +34,7 @@ public class Application extends SpringBootServletInitializer {
         String port = env.getProperty("server.port");
         String path = oConvertUtils.getString(env.getProperty("server.servlet.context-path"));
         log.info("\n----------------------------------------------------------\n\t" +
-                "Application Jeecg-Boot is running! Access URLs:\n\t" +
+                "Application rfid-system is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
                 "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
                 "Swagger-ui: \thttp://" + ip + ":" + port + path + "/swagger-ui.html\n\t" +
