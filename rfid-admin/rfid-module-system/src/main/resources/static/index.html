@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang=zh-cmn-Hans><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>RFID洗衣管理系统</title><link rel=icon href=/logo.png><script src=/cdn/babel-polyfill/polyfill_7_2_5.js></script><style>html,
+    body,
+    #app {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    .chromeframe {
+      margin: 0.2em 0;
+      background: #ccc;
+      color: #000;
+      padding: 0.2em 0;
+    }
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999999;
+    }
+    #loader {
+      display: block;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      width: 120px;
+      height: 120px;
+      margin: -75px 0 0 -75px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 1 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 2s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+      z-index: 1001;
+    }
+    #loader:before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 2 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 3s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+    #loader:after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #FFF;
+      /* COLOR 3 */
+      -moz-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -webkit-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 1.5s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);
+        /* IE 9 */
+        transform: rotate(0deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);
+        /* IE 9 */
+        transform: rotate(360deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+    }
+    @keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);
+        /* IE 9 */
+        transform: rotate(0deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);
+        /* IE 9 */
+        transform: rotate(360deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+    }
+    #loader-wrapper .loader-section {
+      position: fixed;
+      top: 0;
+      width: 51%;
+      height: 100%;
+      background: #49a9ee;
+      /* Old browsers */
+      z-index: 1000;
+      -webkit-transform: translateX(0);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(0);
+      /* IE 9 */
+      transform: translateX(0);
+      /* Firefox 16+, IE 10+, Opera */
+    }
+    #loader-wrapper .loader-section.section-left {
+      left: 0;
+    }
+    #loader-wrapper .loader-section.section-right {
+      right: 0;
+    }
+    /* Loaded */
+    .loaded #loader-wrapper .loader-section.section-left {
+      -webkit-transform: translateX(-100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(-100%);
+      /* IE 9 */
+      transform: translateX(-100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    }
+    .loaded #loader-wrapper .loader-section.section-right {
+      -webkit-transform: translateX(100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(100%);
+      /* IE 9 */
+      transform: translateX(100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    }
+    .loaded #loader {
+      opacity: 0;
+      -webkit-transition: all 0.3s ease-out;
+      transition: all 0.3s ease-out;
+    }
+    .loaded #loader-wrapper {
+      visibility: hidden;
+      -webkit-transform: translateY(-100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateY(-100%);
+      /* IE 9 */
+      transform: translateY(-100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.3s 1s ease-out;
+      transition: all 0.3s 1s ease-out;
+    }
+    /* JavaScript Turned Off */
+    .no-js #loader-wrapper {
+      display: none;
+    }
+    .no-js h1 {
+      color: #222222;
+    }
+    #loader-wrapper .load_title {
+      font-family: 'Open Sans';
+      color: #FFF;
+      font-size: 14px;
+      width: 100%;
+      text-align: center;
+      z-index: 9999999999999;
+      position: absolute;
+      top: 60%;
+      opacity: 1;
+      line-height: 30px;
+    }
+    #loader-wrapper .load_title span {
+      font-weight: normal;
+      font-style: italic;
+      font-size: 14px;
+      color: #FFF;
+      opacity: 0.5;
+    }
+    /* 滚动条优化 start */
+    ::-webkit-scrollbar{
+      width:8px;
+      height:8px;
+    }
+    ::-webkit-scrollbar-track{
+      background: #f6f6f6;
+      border-radius:2px;
+    }
+    ::-webkit-scrollbar-thumb{
+      background: #cdcdcd;
+      border-radius:2px;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+      background: #747474;
+    }
+    ::-webkit-scrollbar-corner {
+      background: #f6f6f6;
+    }
+    /* 滚动条优化 end */</style><script>window._CONFIG = {};
+    window._CONFIG['domianURL'] = 'http://127.0.0.1:9999/';
+    window._CONFIG['casPrefixUrl'] = 'http://cas.example.org:8443/cas';
+    window._CONFIG['onlinePreviewDomainURL'] = 'http://fileview.jeecg.com/onlinePreview'
+    window._CONFIG['staticDomainURL'] = window._CONFIG['domianURL'] + '/sys/common/static';
+    //window._CONFIG['downloadUrl'] = window._CONFIG['domianURL'] + '/sys/common/download';
+    window._CONFIG['pdfDomainURL'] =  window._CONFIG['domianURL'] + '/sys/common/pdf/pdfPreviewIframe';</script><link href=/css/chunk-0025e323.c4813ff8.css rel=prefetch><link href=/css/chunk-03d3d73a.2ac8550e.css rel=prefetch><link href=/css/chunk-059ed1b0.c276a84f.css rel=prefetch><link href=/css/chunk-09606371.ee316dec.css rel=prefetch><link href=/css/chunk-0a3bbf24.c0a842b2.css rel=prefetch><link href=/css/chunk-0e4c5d41.b881cc47.css rel=prefetch><link href=/css/chunk-0f84a1b1.e17e1dd7.css rel=prefetch><link href=/css/chunk-10b1e910.812c692e.css rel=prefetch><link href=/css/chunk-145206cd.2ac8550e.css rel=prefetch><link href=/css/chunk-18f94e4a.454f615e.css rel=prefetch><link href=/css/chunk-1a8cd384.9c7f9657.css rel=prefetch><link href=/css/chunk-1b0f33b0.33700c37.css rel=prefetch><link href=/css/chunk-1d1c45ee.9220a7ee.css rel=prefetch><link href=/css/chunk-1efc5b97.c99c8f0d.css rel=prefetch><link href=/css/chunk-1f00ac08.01fe7491.css rel=prefetch><link href=/css/chunk-1f97fb41.281812e2.css rel=prefetch><link href=/css/chunk-1fae82ec.23e6a9f5.css rel=prefetch><link href=/css/chunk-23cccaf0.c276a84f.css rel=prefetch><link href=/css/chunk-26164806.bc34b8dd.css rel=prefetch><link href=/css/chunk-27251802.a81eaf5b.css rel=prefetch><link href=/css/chunk-296d7cf7.24cd692c.css rel=prefetch><link href=/css/chunk-2a70438e.92f87388.css rel=prefetch><link href=/css/chunk-2ab8afe8.8e7d68b8.css rel=prefetch><link href=/css/chunk-2b52a609.152b8608.css rel=prefetch><link href=/css/chunk-2bb33e5b.2ac8550e.css rel=prefetch><link href=/css/chunk-2d124c71.56513ffe.css rel=prefetch><link href=/css/chunk-304ee0a0.4e096ca3.css rel=prefetch><link href=/css/chunk-3076b886.c571ecf7.css rel=prefetch><link href=/css/chunk-30ad38bb.3be91695.css rel=prefetch><link href=/css/chunk-31d261df.2ac8550e.css rel=prefetch><link href=/css/chunk-3279ea98.3be91695.css rel=prefetch><link href=/css/chunk-3292f24c.3be91695.css rel=prefetch><link href=/css/chunk-3434f587.bba7710b.css rel=prefetch><link href=/css/chunk-355d80d2.874b287a.css rel=prefetch><link href=/css/chunk-35757404.c276a84f.css rel=prefetch><link href=/css/chunk-35af4a62.d315676c.css rel=prefetch><link href=/css/chunk-37e91924.e042f824.css rel=prefetch><link href=/css/chunk-382e2891.33700c37.css rel=prefetch><link href=/css/chunk-386c4a71.c2b837f5.css rel=prefetch><link href=/css/chunk-3e69302b.20840f11.css rel=prefetch><link href=/css/chunk-415b3a51.4ff0b95c.css rel=prefetch><link href=/css/chunk-45251b6a.3853605d.css rel=prefetch><link href=/css/chunk-456730dd.2d60df55.css rel=prefetch><link href=/css/chunk-479215b9.93cc29b3.css rel=prefetch><link href=/css/chunk-48670e1a.fdf599e0.css rel=prefetch><link href=/css/chunk-4928b002.a83740ee.css rel=prefetch><link href=/css/chunk-4d93dbe9.09fc2625.css rel=prefetch><link href=/css/chunk-4edc1304.3a7d32f5.css rel=prefetch><link href=/css/chunk-4fad1eff.2ac8550e.css rel=prefetch><link href=/css/chunk-5133e6cc.2ac8550e.css rel=prefetch><link href=/css/chunk-54e70131.063fe3d5.css rel=prefetch><link href=/css/chunk-55f55de3.2ac8550e.css rel=prefetch><link href=/css/chunk-56bfd056.2ac8550e.css rel=prefetch><link href=/css/chunk-58c62398.3cd2c16e.css rel=prefetch><link href=/css/chunk-58e060ed.da20a54e.css rel=prefetch><link href=/css/chunk-5ba41c0a.1f22179b.css rel=prefetch><link href=/css/chunk-5c05eb62.7108e972.css rel=prefetch><link href=/css/chunk-5cf0b15f.226efeed.css rel=prefetch><link href=/css/chunk-5f72f69f.fbb6031c.css rel=prefetch><link href=/css/chunk-60eeb670.002c4958.css rel=prefetch><link href=/css/chunk-61bf2c49.883795f0.css rel=prefetch><link href=/css/chunk-62ec2dc4.de446e17.css rel=prefetch><link href=/css/chunk-6344b590.7432af04.css rel=prefetch><link href=/css/chunk-637a85be.29b426fc.css rel=prefetch><link href=/css/chunk-63c868c5.dbfba053.css rel=prefetch><link href=/css/chunk-65d64f56.3b2daf81.css rel=prefetch><link href=/css/chunk-68ff8a58.c276a84f.css rel=prefetch><link href=/css/chunk-6a9ee39d.29b426fc.css rel=prefetch><link href=/css/chunk-6fd74fb1.2ac8550e.css rel=prefetch><link href=/css/chunk-725c6fe2.1ab2c26e.css rel=prefetch><link href=/css/chunk-73343c51.a09abd49.css rel=prefetch><link href=/css/chunk-773d5c8e.e3a48628.css rel=prefetch><link href=/css/chunk-774a8e22.c9f9a763.css rel=prefetch><link href=/css/chunk-79c08526.e1fea06e.css rel=prefetch><link href=/css/chunk-7c6a5d7c.d4f84086.css rel=prefetch><link href=/css/chunk-7f6a83ef.f94ee603.css rel=prefetch><link href=/css/chunk-84613f6c.71c72762.css rel=prefetch><link href=/css/chunk-84fc8d28.2eb28bcd.css rel=prefetch><link href=/css/chunk-86a362a4.764a5a4c.css rel=prefetch><link href=/css/chunk-906dc3d2.2ac8550e.css rel=prefetch><link href=/css/chunk-938e6e8c.06c172c4.css rel=prefetch><link href=/css/chunk-93e95ab6.2ac8550e.css rel=prefetch><link href=/css/chunk-9526fba0.8c5c6ee1.css rel=prefetch><link href=/css/chunk-96ffada4.c325dd9d.css rel=prefetch><link href=/css/chunk-9a2b7030.8417646c.css rel=prefetch><link href=/css/chunk-9c452406.0cdf1759.css rel=prefetch><link href=/css/chunk-a25ffa9c.5c386c8b.css rel=prefetch><link href=/css/chunk-a32eb2ee.5c71bd28.css rel=prefetch><link href=/css/chunk-a5f2247e.98816e01.css rel=prefetch><link href=/css/chunk-a9e58134.281812e2.css rel=prefetch><link href=/css/chunk-ab16b958.9d82f261.css rel=prefetch><link href=/css/chunk-ab85daa8.2ac8550e.css rel=prefetch><link href=/css/chunk-b2382366.2ac8550e.css rel=prefetch><link href=/css/chunk-b4b546ec.fd93880c.css rel=prefetch><link href=/css/chunk-b8114340.281812e2.css rel=prefetch><link href=/css/chunk-ba21aade.b8683418.css rel=prefetch><link href=/css/chunk-cd119914.64f308e8.css rel=prefetch><link href=/css/chunk-cec8630a.60908fad.css rel=prefetch><link href=/css/chunk-dcec768e.8a1e2161.css rel=prefetch><link href=/css/chunk-de0acff6.98816e01.css rel=prefetch><link href=/css/chunk-e08ce9b4.6c9705ea.css rel=prefetch><link href=/css/chunk-e0998810.ef705e01.css rel=prefetch><link href=/css/chunk-e78ce6c2.684c5ecc.css rel=prefetch><link href=/css/chunk-ec926e5e.5a8c9eed.css rel=prefetch><link href=/css/chunk-f0fce26a.02e8af93.css rel=prefetch><link href=/css/chunk-f4c2b020.2ac8550e.css rel=prefetch><link href=/css/chunk-f88b5e8e.3bfbbd0b.css rel=prefetch><link href=/css/fail.281812e2.css rel=prefetch><link href=/css/user.9cb2bc86.css rel=prefetch><link href=/js/chunk-0025e323.9e3494e6.js rel=prefetch><link href=/js/chunk-03d3d73a.32a3fad9.js rel=prefetch><link href=/js/chunk-0568f6a4.a7b5702c.js rel=prefetch><link href=/js/chunk-059ed1b0.ba9e16d3.js rel=prefetch><link href=/js/chunk-05ad0f38.f82200ea.js rel=prefetch><link href=/js/chunk-09606371.ef92878c.js rel=prefetch><link href=/js/chunk-09b939f2.d5d93359.js rel=prefetch><link href=/js/chunk-0a3bbf24.dcbc1db2.js rel=prefetch><link href=/js/chunk-0bff7d51.21713739.js rel=prefetch><link href=/js/chunk-0e4c5d41.87eb0836.js rel=prefetch><link href=/js/chunk-0f84a1b1.e50f3ccd.js rel=prefetch><link href=/js/chunk-10b1e910.41cd0f10.js rel=prefetch><link href=/js/chunk-145206cd.33a203f4.js rel=prefetch><link href=/js/chunk-14a31191.92d6286c.js rel=prefetch><link href=/js/chunk-155d1d61.a73a65ec.js rel=prefetch><link href=/js/chunk-162dbbed.bea8b4f0.js rel=prefetch><link href=/js/chunk-18c6eb38.c93ad35f.js rel=prefetch><link href=/js/chunk-18f94e4a.7873c424.js rel=prefetch><link href=/js/chunk-19319dea.6a46e989.js rel=prefetch><link href=/js/chunk-19c7ca16.b6d22f6d.js rel=prefetch><link href=/js/chunk-1a8cd384.73e799a4.js rel=prefetch><link href=/js/chunk-1b0f33b0.7cdab5f7.js rel=prefetch><link href=/js/chunk-1d1c45ee.9dcb9e23.js rel=prefetch><link href=/js/chunk-1de2c333.3ca6b7f6.js rel=prefetch><link href=/js/chunk-1efc5b97.7964c5ad.js rel=prefetch><link href=/js/chunk-1f00ac08.bbfde695.js rel=prefetch><link href=/js/chunk-1f97fb41.a04f20ee.js rel=prefetch><link href=/js/chunk-1fae82ec.561f3bf6.js rel=prefetch><link href=/js/chunk-2352b25e.ce5ed237.js rel=prefetch><link href=/js/chunk-23cccaf0.04f82ca1.js rel=prefetch><link href=/js/chunk-26164806.3da16bc9.js rel=prefetch><link href=/js/chunk-27251802.ce891eff.js rel=prefetch><link href=/js/chunk-296d7cf7.a08ffc01.js rel=prefetch><link href=/js/chunk-2a70438e.6c727b3c.js rel=prefetch><link href=/js/chunk-2ab8afe8.1654e5af.js rel=prefetch><link href=/js/chunk-2b52a609.fd3492d9.js rel=prefetch><link href=/js/chunk-2bb33e5b.dfb49dde.js rel=prefetch><link href=/js/chunk-2d0a3776.8e8ac02e.js rel=prefetch><link href=/js/chunk-2d0a3c6b.fe212b76.js rel=prefetch><link href=/js/chunk-2d0a3cbb.b970fbee.js rel=prefetch><link href=/js/chunk-2d0a3d24.766b7dfe.js rel=prefetch><link href=/js/chunk-2d0ae949.7f977d30.js rel=prefetch><link href=/js/chunk-2d0aecfc.ca1d3c6f.js rel=prefetch><link href=/js/chunk-2d0b1e33.e2d0c54b.js rel=prefetch><link href=/js/chunk-2d0b9b65.632a8557.js rel=prefetch><link href=/js/chunk-2d0ba8d9.c92e31bb.js rel=prefetch><link href=/js/chunk-2d0bdf09.34da3deb.js rel=prefetch><link href=/js/chunk-2d0be1b3.aa6c5c7b.js rel=prefetch><link href=/js/chunk-2d0c0c28.08ac5370.js rel=prefetch><link href=/js/chunk-2d0c1aed.0257312d.js rel=prefetch><link href=/js/chunk-2d0c1d57.aa7ebfd9.js rel=prefetch><link href=/js/chunk-2d0c230b.f55ee632.js rel=prefetch><link href=/js/chunk-2d0c45fa.46e89394.js rel=prefetch><link href=/js/chunk-2d0c4e25.5819c389.js rel=prefetch><link href=/js/chunk-2d0c8bc6.27091d36.js rel=prefetch><link href=/js/chunk-2d0c9207.6c7d213e.js rel=prefetch><link href=/js/chunk-2d0cef18.b9ab0a13.js rel=prefetch><link href=/js/chunk-2d0cfe94.0558a202.js rel=prefetch><link href=/js/chunk-2d0d01f4.8db4739a.js rel=prefetch><link href=/js/chunk-2d0d30b9.b75b205a.js rel=prefetch><link href=/js/chunk-2d0d4043.ee4831f6.js rel=prefetch><link href=/js/chunk-2d0d5f54.ef843e16.js rel=prefetch><link href=/js/chunk-2d0d7217.48dfb29d.js rel=prefetch><link href=/js/chunk-2d0dde11.ca94021d.js rel=prefetch><link href=/js/chunk-2d0ddfd0.d06ca533.js rel=prefetch><link href=/js/chunk-2d0dec69.d2aad7f4.js rel=prefetch><link href=/js/chunk-2d0df024.f51fb218.js rel=prefetch><link href=/js/chunk-2d0e1f65.b6e4a8f9.js rel=prefetch><link href=/js/chunk-2d0e2366.3a2455c0.js rel=prefetch><link href=/js/chunk-2d0e4e51.e26eaa76.js rel=prefetch><link href=/js/chunk-2d0e4ecc.30724f49.js rel=prefetch><link href=/js/chunk-2d0e95df.f643f9f4.js rel=prefetch><link href=/js/chunk-2d0e9974.f1718ceb.js rel=prefetch><link href=/js/chunk-2d0e9bb1.25935d0d.js rel=prefetch><link href=/js/chunk-2d0f05f3.42349136.js rel=prefetch><link href=/js/chunk-2d124c71.6dc65b41.js rel=prefetch><link href=/js/chunk-2d209ae6.f3e59435.js rel=prefetch><link href=/js/chunk-2d20e7f3.c07ca8f3.js rel=prefetch><link href=/js/chunk-2d20fed6.99350c87.js rel=prefetch><link href=/js/chunk-2d210bbe.2a434d0b.js rel=prefetch><link href=/js/chunk-2d210c28.63cc79ec.js rel=prefetch><link href=/js/chunk-2d216d93.1885963c.js rel=prefetch><link href=/js/chunk-2d21dfe7.6ddc2e8d.js rel=prefetch><link href=/js/chunk-2d221f96.c01f4e7e.js rel=prefetch><link href=/js/chunk-2d225006.d35f8e09.js rel=prefetch><link href=/js/chunk-2d229a09.8739a88e.js rel=prefetch><link href=/js/chunk-2d22cc26.fa0b5fdc.js rel=prefetch><link href=/js/chunk-2d22d262.396c89d5.js rel=prefetch><link href=/js/chunk-2d23019d.35a77ba0.js rel=prefetch><link href=/js/chunk-2d238425.34de496d.js rel=prefetch><link href=/js/chunk-2d238446.1f4df203.js rel=prefetch><link href=/js/chunk-2f6039ec.9939d02b.js rel=prefetch><link href=/js/chunk-2ff21ab7.3ea514ca.js rel=prefetch><link href=/js/chunk-304ee0a0.661554e1.js rel=prefetch><link href=/js/chunk-307332c9.38b5f65f.js rel=prefetch><link href=/js/chunk-3076b886.0e9eaa5e.js rel=prefetch><link href=/js/chunk-30ad38bb.a1464fe4.js rel=prefetch><link href=/js/chunk-30c74116.06ffdb32.js rel=prefetch><link href=/js/chunk-30c913cb.f78672b1.js rel=prefetch><link href=/js/chunk-30d2b0d5.9e825f9b.js rel=prefetch><link href=/js/chunk-31d261df.d2f2f96e.js rel=prefetch><link href=/js/chunk-3279ea98.0afb0228.js rel=prefetch><link href=/js/chunk-3292f24c.2a20eb36.js rel=prefetch><link href=/js/chunk-3434f587.687deedd.js rel=prefetch><link href=/js/chunk-34cacdd2.48ba1dfb.js rel=prefetch><link href=/js/chunk-355d80d2.04a4175e.js rel=prefetch><link href=/js/chunk-35757404.53afa7ef.js rel=prefetch><link href=/js/chunk-35af4a62.2c4bf2c1.js rel=prefetch><link href=/js/chunk-37e91924.33bac135.js rel=prefetch><link href=/js/chunk-3802e530.7af5eeda.js rel=prefetch><link href=/js/chunk-382e2891.70386631.js rel=prefetch><link href=/js/chunk-386c4a71.2e7cd3ca.js rel=prefetch><link href=/js/chunk-3e69302b.eae179dc.js rel=prefetch><link href=/js/chunk-3efb7ad5.0496234b.js rel=prefetch><link href=/js/chunk-3f544492.131f452c.js rel=prefetch><link href=/js/chunk-415b3a51.046237b6.js rel=prefetch><link href=/js/chunk-43763ee6.b82e3912.js rel=prefetch><link href=/js/chunk-45251b6a.fba322d9.js rel=prefetch><link href=/js/chunk-456730dd.fdd9dd95.js rel=prefetch><link href=/js/chunk-479215b9.a1db29a1.js rel=prefetch><link href=/js/chunk-48670e1a.a269b01f.js rel=prefetch><link href=/js/chunk-4928b002.80320807.js rel=prefetch><link href=/js/chunk-4a49d1f9.07b8d160.js rel=prefetch><link href=/js/chunk-4d93dbe9.93f9c691.js rel=prefetch><link href=/js/chunk-4edc1304.30718ea5.js rel=prefetch><link href=/js/chunk-4fad1eff.19d2701f.js rel=prefetch><link href=/js/chunk-5133e6cc.2fc4b6bc.js rel=prefetch><link href=/js/chunk-54e70131.e494b82f.js rel=prefetch><link href=/js/chunk-55f55de3.83e8d9ec.js rel=prefetch><link href=/js/chunk-56830af9.50ff1350.js rel=prefetch><link href=/js/chunk-56bfd056.7c83f9ce.js rel=prefetch><link href=/js/chunk-57bb7720.650c8186.js rel=prefetch><link href=/js/chunk-58c62398.3e7671c5.js rel=prefetch><link href=/js/chunk-58e060ed.15957442.js rel=prefetch><link href=/js/chunk-5ba41c0a.623423ca.js rel=prefetch><link href=/js/chunk-5c05eb62.010ef352.js rel=prefetch><link href=/js/chunk-5cf0b15f.188b5ff6.js rel=prefetch><link href=/js/chunk-5f72f69f.671f7b37.js rel=prefetch><link href=/js/chunk-60eeb670.8a95dbe9.js rel=prefetch><link href=/js/chunk-61bf2c49.4a8b1a15.js rel=prefetch><link href=/js/chunk-62ec2dc4.fc418dac.js rel=prefetch><link href=/js/chunk-6344b590.cfe4f7f6.js rel=prefetch><link href=/js/chunk-637a85be.dbca9132.js rel=prefetch><link href=/js/chunk-63c868c5.1103910e.js rel=prefetch><link href=/js/chunk-65d64f56.614264ad.js rel=prefetch><link href=/js/chunk-68ff8a58.0899a249.js rel=prefetch><link href=/js/chunk-69198a96.42177a83.js rel=prefetch><link href=/js/chunk-6a9ee39d.d44eed3e.js rel=prefetch><link href=/js/chunk-6fd74fb1.e438c0e2.js rel=prefetch><link href=/js/chunk-725c6fe2.d5498865.js rel=prefetch><link href=/js/chunk-73343c51.8c87d31b.js rel=prefetch><link href=/js/chunk-773d5c8e.543075ec.js rel=prefetch><link href=/js/chunk-774a8e22.02757cb7.js rel=prefetch><link href=/js/chunk-79c08526.1bebe7d9.js rel=prefetch><link href=/js/chunk-7aab803c.44b17f56.js rel=prefetch><link href=/js/chunk-7c6a5d7c.91dc8529.js rel=prefetch><link href=/js/chunk-7f6a83ef.e11f9c7c.js rel=prefetch><link href=/js/chunk-84613f6c.858ecd4f.js rel=prefetch><link href=/js/chunk-84fc8d28.ab47a3e0.js rel=prefetch><link href=/js/chunk-86a362a4.e84edad4.js rel=prefetch><link href=/js/chunk-906dc3d2.b86ff5ea.js rel=prefetch><link href=/js/chunk-938e6e8c.03244c42.js rel=prefetch><link href=/js/chunk-93e95ab6.1f1f45fe.js rel=prefetch><link href=/js/chunk-9526fba0.8ce83cad.js rel=prefetch><link href=/js/chunk-96ffada4.655897df.js rel=prefetch><link href=/js/chunk-9a2b7030.a49e8187.js rel=prefetch><link href=/js/chunk-9c452406.ddd33744.js rel=prefetch><link href=/js/chunk-9de60898.699c83dc.js rel=prefetch><link href=/js/chunk-a25ffa9c.1c20e024.js rel=prefetch><link href=/js/chunk-a32eb2ee.3a323cc4.js rel=prefetch><link href=/js/chunk-a5f2247e.dfb26fc0.js rel=prefetch><link href=/js/chunk-a814caa2.af9399e4.js rel=prefetch><link href=/js/chunk-a9e58134.f6d4657c.js rel=prefetch><link href=/js/chunk-ab16b958.26f97a9e.js rel=prefetch><link href=/js/chunk-ab85daa8.fdf345d1.js rel=prefetch><link href=/js/chunk-acf0bcce.3beeef22.js rel=prefetch><link href=/js/chunk-b2382366.e5ecef2a.js rel=prefetch><link href=/js/chunk-b4b546ec.6f7091f7.js rel=prefetch><link href=/js/chunk-b706c73c.90d8b8c2.js rel=prefetch><link href=/js/chunk-b8114340.c473b720.js rel=prefetch><link href=/js/chunk-ba21aade.3da2004c.js rel=prefetch><link href=/js/chunk-c3477bb8.d5dff77f.js rel=prefetch><link href=/js/chunk-cd119914.8f6d9772.js rel=prefetch><link href=/js/chunk-cec8630a.0b88ce8b.js rel=prefetch><link href=/js/chunk-d56e4812.6c3f0c08.js rel=prefetch><link href=/js/chunk-dcec768e.66d461d0.js rel=prefetch><link href=/js/chunk-de0acff6.a69755d8.js rel=prefetch><link href=/js/chunk-e08ce9b4.3e363d7b.js rel=prefetch><link href=/js/chunk-e0998810.2195aebc.js rel=prefetch><link href=/js/chunk-e78ce6c2.75de334e.js rel=prefetch><link href=/js/chunk-e9ca8404.71857c20.js rel=prefetch><link href=/js/chunk-ec926e5e.48ac85b7.js rel=prefetch><link href=/js/chunk-f0fce26a.38a085a6.js rel=prefetch><link href=/js/chunk-f4c2b020.fe071b57.js rel=prefetch><link href=/js/chunk-f6d02986.be7b68b2.js rel=prefetch><link href=/js/chunk-f88b5e8e.9248f736.js rel=prefetch><link href=/js/fail.b1f14424.js rel=prefetch><link href=/js/user.d2315ae7.js rel=prefetch><link href=/css/app.b5a61a38.css rel=preload as=style><link href=/css/chunk-vendors.65f42c3e.css rel=preload as=style><link href=/js/app.94846333.js rel=preload as=script><link href=/js/chunk-vendors.3d7ed945.js rel=preload as=script><link href=/css/chunk-vendors.65f42c3e.css rel=stylesheet><link href=/css/app.b5a61a38.css rel=stylesheet></head><body><div id=app><div id=loader-wrapper><div id=loader></div><div class="loader-section section-left"></div><div class="loader-section section-right"></div><div class=load_title>正在加载 RFID洗衣管理系统,请耐心等待</div></div></div><script src=/js/chunk-vendors.3d7ed945.js></script><script src=/js/app.94846333.js></script></body></html>
